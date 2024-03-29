@@ -1,10 +1,22 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SAIL</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.I.L. Dashboard</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <p>index.html for SAIL</p>
+    <div class="background-image"></div>
+    <div id="dashboard">
+        <!-- The 'onsubmit' attribute is added to call 'handleAnalyzeClick' function when the form is submitted -->
+        <form id="tickerForm">
+          <input type="text" id="tickerInput" name="ticker" placeholder="Enter Stock Ticker" required>
+          <button type="submit" id="analyzeBtn">Analyze</button>
+      </form>
+      <!-- Div to display results -->
+      <div id="results"></div>
+  </div>
+  <!-- Link to the external script.js file -->
+  <script src="script.js"></script>
 </body>
-</html>

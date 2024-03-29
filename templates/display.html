@@ -2,9 +2,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ticker}} Results</title>
+  <title>Stock Analysis: {{ ticker }}</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <p>Display results for {{ticker}}</p>
+  <h1>Results for {{ ticker }}</h1>
+  <p>Sentiment Analysis: {{ stock_info.Sentiment }}</p> <!-- Sentiment analysis of the company's overall sentiment whenever that is added-->
+  <p>Recommendation: {{ stock_info.Recommendation }}</p>
+  <img src="{{ stock_info.Chart }}" alt="Stock Chart">
+  <!-- More elements can be added here to display additional information -->
 </body>
 </html>
