@@ -28,7 +28,10 @@ class ServerController:
         # You can pass variables to the template to be rendered dynamically
         return render_template('display.html', ticker=ticker)
 
-if __name__ == "__main__":
-    app_controller = ServerController(__name__)
-    app_controller.init_routes()
-    app_controller.run(debug=True)
+# run this using the cli
+# python sail.py run -d
+
+# if __name__ == "__main__":
+#     app_controller = ServerController(__name__)
+#     app_controller.init_routes()
+#     app_controller.run(debug=True)

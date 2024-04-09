@@ -4,3 +4,7 @@
 pyvenv.cfg
 /__pycache__
 /nltk_data
+t_preprocessing.out
+/train_data
+/train_data_modified
+/FinancialPhraseBank-v1.0
