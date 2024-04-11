@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+from bs4 import BeautifulSoup
 import time
 
 class ArticleScraper:
@@ -20,6 +21,16 @@ class ArticleScraper:
     chrome_options.add_argument('--disable-dev-shm-usage')
     self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
+  # uses ticker instance variable and returns a list of article titles
+  def getArticleTitles(self):
+    target_url = self.base_url.fomat(self.ticker) #assuming base_url to be formatted with the ticker
+    self.driver.get(target_url)
+
+    title_elements = self.driver.find_elements(By.CSS_SELECTOR, 'tr.cursor-pointer.has-label a.tab-link-news')
+
+    article_titles = [element.text for element in title_elements]
+    return article_titles
+    
   # uses ticker instance variable and return a list of article links
   def getArticleLinks(self):
     # https://finviz.com/quote.ashx?t=TICKER&p=d
@@ -32,13 +43,18 @@ class ArticleScraper:
     return article_links
 
   # scrapes the article at the given link and returns the text
-  # could also just scrape the article headlines rather than full articles
   def scrapeArticle(self, articleLink):
     self.driver.get(articleLink)
         
-    # TODO: Need to tailor for article site structure
-    article_text = self.driver.find_element(By.CSS_SELECTOR, 'div.article-content').text
-       
+    time.sleep(2)  #time for dynamic content to load
+    
+    #using beautifulsoup to parse the page
+    soup = BeautifulSoup(self.driver.page_source, 'html.parser')
+        
+    #combining all <p> blocks
+    paragraphs = soup.find_all('p')
+    article_text = ' '.join([p.text for p in paragraphs])
+
     return article_text
   
   # destroys webdriver instance
