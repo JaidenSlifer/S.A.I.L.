@@ -36,7 +36,7 @@ if __name__ == '__main__':
     epochs = 15
     data_path = ''
     if(len(args) > 1 and not args[1].startswith('-')):
-      data_path = path + '\\' + args[1]
+      data_path = os.path.join(path, args[1])
     else:
       print("Missing Data Path")
       exit(1)
@@ -55,17 +55,10 @@ if __name__ == '__main__':
     # else:
     #   os.mkdir(save_path)
     model = SentimentModel()
-    print(save_path)
     model.train(data_path, save_model=save_model, save_path=save_path)
-  elif(args[0] == 't_preprocessing'):
-    preprocessor = TextProcessor()
-    with open(path+'\\dataset\\Processed_50Agree.tsv', 'r') as dataset:
-      for line in dataset.readlines():
-        print(line.split('\t'))
-        print()
-      # processed = preprocessor.processText(lines)
-      # for line in processed:
-      #   print(processed)
-      #   print()
+  elif(args[0] == 'predict'):
+    model = SentimentModel()
+    model.load_model(args[1])
+    model.predict()
   else:
     print("Command not recognized")

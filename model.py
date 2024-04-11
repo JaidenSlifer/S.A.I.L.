@@ -5,6 +5,8 @@ from keras.models import Sequential
 from keras.layers import TextVectorization, Embedding, LSTM, Dense, Dropout, Conv1D, GlobalMaxPooling1D
 from keras.losses import SparseCategoricalCrossentropy
 from keras.callbacks import ModelCheckpoint
+from keras.metrics import SparseCategoricalAccuracy
+from keras.models import load_model
 import os
 
 class SentimentModel:
@@ -59,17 +61,29 @@ class SentimentModel:
     self.model.add(Dense(3, activation='sigmoid'))
 
 
-    callbacks = []
+    
     if(save_model and len(save_path) > 0):
-      save_path = os.path.join(save_path, 'nlp_model.ckpt')
-      callbacks.append(ModelCheckpoint(filepath=save_path, save_weights_only=True, verbose=1, save_best_only=True))
+      save_path = f'{save_path}.keras'
 
     # compile and fit model on dataset
     self.model.compile(
-      loss=SparseCategoricalCrossentropy(from_logits=True),
+      loss=SparseCategoricalCrossentropy(),
       optimizer='adam',
-      metrics=['accuracy'])
-    self.model.fit(train_data, validation_data=val_data, epochs=15, callbacks=callbacks)
+      metrics=[SparseCategoricalAccuracy()])
+    self.model.fit(train_data, validation_data=val_data, epochs=5)
 
-  def test(self):
-    pass
+    # save model to file
+    self.model.save(save_path, overwrite=True, save_format='keras')
+  
+  def predict(self):
+    test_predict = [
+      "In the third quarter of 2010 , net sales increased by 5.2 % to EUR 205.5 mn , and operating profit by 34.9 % to EUR 23.5 mn .",
+      "Apple reported revenue gains over the past two quarters ."
+    ]
+
+    prediction = self.model.predict(test_predict)
+    print(prediction)
+
+  def load_model(self, model_path):
+    model_path = f'{model_path}.keras'
+    self.model = load_model(model_path, compile=True)
