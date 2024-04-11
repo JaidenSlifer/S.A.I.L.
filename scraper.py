@@ -50,9 +50,9 @@ class ArticleScraper:
     
     #using beautifulsoup to parse the page
     soup = BeautifulSoup(self.driver.page_source, 'html.parser')
-        
-    #combining all <p> blocks
-    paragraphs = soup.find_all('p')
+
+    #combining all <p> blocks that do not have a class attribute
+    paragraphs = soup.find_all('p', class_=False)
     article_text = ' '.join([p.text for p in paragraphs])
 
     return article_text
