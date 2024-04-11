@@ -1,6 +1,11 @@
 /Include
 /Lib
 /Scripts
+/.vscode
 pyvenv.cfg
 /__pycache__
 /nltk_data
+t_preprocessing.out
+/train_data*
+/FinancialPhraseBank-v1.0
+*.keras
