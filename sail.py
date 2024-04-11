@@ -4,6 +4,7 @@ import shutil
 from server import ServerController
 from textprocessor import TextProcessor
 from model import SentimentModel
+from scraper import ArticleScraper
 
 path = os.path.abspath(os.getcwd())
 
@@ -13,6 +14,7 @@ help = """
   commands:
     run [<args>]: starts a Flask development server
     train <data_dir> [<args>]: trains the model using the dataset in given directory name
+    scraper: tests the scraper
     
   args:
     run
@@ -48,7 +50,6 @@ if __name__ == '__main__':
       else:
         print("Incorrect Arguments")
         exit(1)
-
     # if(os.path.isdir(save_path)):
     #   shutil.rmtree(save_path)
     #   os.mkdir(save_path)
@@ -60,5 +61,32 @@ if __name__ == '__main__':
     model = SentimentModel()
     model.load_model(args[1])
     model.predict()
+  elif(args[0] == 'scraper'):
+    if len(args) < 3:
+      print("Usage: scraper <ticker> <base_url> [-l | -t | -s <article_url>]")
+      exit(1)
+
+    ticker = args[1]
+    base_url = args[2]
+    scraper = ArticleScraper(ticker, base_url)
+    scraper.initializeScraper()
+
+    if '-l' in args:
+      links = scraper.getArticleLinks()
+      for link in links:
+        print(link)
+    elif '-t' in args:
+      titles = scraper.getArticleTitles()
+      for title in titles:
+        print(title)
+    elif '-s' in args:
+      article_index = args.index('-s') + 1
+      if article_index < len(args):
+        article_text = scraper.scrapeArticle(args[article_index])
+        print(article_text)
+      else:
+        print("Article URL required after -s")
+      
+    scraper.closeScraper()
   else:
     print("Command not recognized")
