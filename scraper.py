@@ -8,9 +8,9 @@ import time
 
 class ArticleScraper:
   
-  def __init__(self, ticker, driver, base_url):
+  def __init__(self, ticker, driver):
     self.ticker = ticker
-    self.base_url = base_url
+    self.base_url = "https://finviz.com/quote.ashx?t={ticker}&p=d".format(ticker=ticker)
     self.driver = None
 
   # initializes chrome webdriver instance
@@ -23,8 +23,7 @@ class ArticleScraper:
 
   # uses ticker instance variable and returns a list of article titles
   def getArticleTitles(self):
-    target_url = self.base_url.fomat(self.ticker) #assuming base_url to be formatted with the ticker
-    self.driver.get(target_url)
+    self.driver.get(self.base_url)
 
     title_elements = self.driver.find_elements(By.CSS_SELECTOR, 'tr.cursor-pointer.has-label a.tab-link-news')
 

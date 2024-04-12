@@ -62,13 +62,12 @@ if __name__ == '__main__':
     model.load_model(args[1])
     model.predict()
   elif(args[0] == 'scraper'):
-    if len(args) < 3:
-      print("Usage: scraper <ticker> <base_url> [-l | -t | -s <article_url>]")
+    if len(args) < 2:
+      print("Usage: scraper <ticker> [-l | -t | -s <article_url>]")
       exit(1)
 
     ticker = args[1]
-    base_url = args[2]
-    scraper = ArticleScraper(ticker, base_url)
+    scraper = ArticleScraper(ticker, "https://finviz.com/quote.ashx?t={ticker}&p=d")
     scraper.initializeScraper()
 
     if '-l' in args:
