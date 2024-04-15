@@ -55,9 +55,9 @@ class ArticleScraper:
     #using beautifulsoup to parse the page
     soup = BeautifulSoup(self.driver.page_source, 'html.parser')
 
-    #combining all <p> blocks that do not have a class attribute
+    #combining all <p> blocks that do not have 'ad' in their class attribute
     paragraphs = soup.find_all('p')
-    article_text = ' '.join([p.text for p in paragraphs])
+    article_text = ' '.join(p.text for p in paragraphs if 'ad' not in p.get('class', []))
 
     return article_text
   
