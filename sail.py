@@ -1,12 +1,12 @@
 import sys
 import os
-os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 import shutil
 from server import ServerController
 from textprocessor import TextProcessor
 from model import SentimentModel
 from scraper import ArticleScraper
 
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 path = os.path.abspath(os.getcwd())
 
 help = """
