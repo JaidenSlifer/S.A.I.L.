@@ -1,5 +1,6 @@
 import sys
 import os
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 import shutil
 from server import ServerController
 from textprocessor import TextProcessor
@@ -14,7 +15,7 @@ help = """
   commands:
     run [<args>]: starts a Flask development server
     train <data_dir> [<args>]: trains the model using the dataset in given directory name
-    scraper: tests the scraper
+    scraper <ticker> [-l | -t | -s <article_url>]: tests the scraper
     
   args:
     run

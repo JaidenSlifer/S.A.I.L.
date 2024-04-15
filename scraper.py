@@ -11,14 +11,19 @@ class ArticleScraper:
   def __init__(self, ticker, driver):
     self.ticker = ticker
     self.base_url = "https://finviz.com/quote.ashx?t={ticker}&p=d".format(ticker=ticker)
-    self.driver = None
+    self.driver = driver
 
   # initializes chrome webdriver instance
   def initializeScraper(self):
     chrome_options = Options()
-    chrome_options.add_argument('--headless')
+    #chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument('--disable-gpu')
+    chrome_options.add_argument('--disable-software-rasterizer') 
+    chrome_options.add_argument('--disable-gl-drawing-for-tests') 
+    chrome_options.add_argument('--disable-accelerated-2d-canvas')
+    chrome_options.add_argument('--disable-accelerated-video-decode')
     self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
   # uses ticker instance variable and returns a list of article titles
@@ -51,7 +56,7 @@ class ArticleScraper:
     soup = BeautifulSoup(self.driver.page_source, 'html.parser')
 
     #combining all <p> blocks that do not have a class attribute
-    paragraphs = soup.find_all('p', class_=False)
+    paragraphs = soup.find_all('p')
     article_text = ' '.join([p.text for p in paragraphs])
 
     return article_text
