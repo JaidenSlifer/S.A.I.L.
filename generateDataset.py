@@ -1,10 +1,11 @@
 import os
 import shutil
 from textprocessor import TextProcessor
+import random
 
 path = os.path.abspath(os.getcwd())
 file_path = path+'\\FinancialPhraseBank-v1.0\\Sentences_50Agree.txt'
-dataset_path = path+'\\train_data_utf8'
+dataset_path = path+'\\train_data_culled'
 
 # reset dataset directory
 if(os.path.isdir(dataset_path)):
@@ -23,7 +24,7 @@ classify = {
 
 
 counts = [0, 0, 0]
-#tp = TextProcessor()
+tp = TextProcessor()
 with open(file_path, 'r', encoding='utf-8') as fpb:
   os.mkdir(dataset_path+'\\positive')
   os.mkdir(dataset_path+'\\neutral')
@@ -31,10 +32,11 @@ with open(file_path, 'r', encoding='utf-8') as fpb:
   for line in fpb.readlines():
     tokens = line.split('@')
     text = tokens[0]
-    #[text] = tp.processText([text])
+    [text] = tp.processText([text])
     sent = tokens[1].strip('\n')
-    f = open(f'{dataset_path}\\{sent}\\{counts[classify[sent]]}.txt', 'w+')
-    f.write(text)
-    counts[classify[sent]] += 1
+    if(sent != 'neutral' or random.randint(0,2) != 1 and len(text) > 0): # cull a proportion of neutral lines
+      f = open(f'{dataset_path}\\{sent}\\{counts[classify[sent]]}.txt', 'w+')
+      f.write(text)
+      counts[classify[sent]] += 1
 
     

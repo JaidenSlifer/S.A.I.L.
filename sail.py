@@ -43,8 +43,10 @@ if __name__ == '__main__':
     else:
       print("Missing Data Path")
       exit(1)
+
+    save_model = False
+    save_path = ''
     if(len(args) > 2 and args[2] == '-s'):
-      save_path = ''
       save_model = True
       if(len(args) > 3):
         save_path = args[3]
@@ -58,10 +60,11 @@ if __name__ == '__main__':
     #   os.mkdir(save_path)
     model = SentimentModel()
     model.train(data_path, save_model=save_model, save_path=save_path)
+    model.test_predict()
   elif(args[0] == 'predict'):
     model = SentimentModel()
     model.load_model(args[1])
-    model.predict()
+    model.test_predict()
   elif(args[0] == 'scraper'):
     if len(args) < 2:
       print("Usage: scraper <ticker> [-l | -t | -s <article_url>]")
