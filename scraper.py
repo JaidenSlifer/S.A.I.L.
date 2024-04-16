@@ -18,7 +18,7 @@ class ArticleScraper:
   # initializes chrome webdriver instance
   def initializeScraper(self):
     chrome_options = Options()
-    chrome_options.add_argument('--headless')
+    #chrome_options.add_argument('--headless=new')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument('--disable-gpu')
@@ -28,7 +28,7 @@ class ArticleScraper:
     chrome_options.add_argument('--disable-accelerated-video-decode')
     chrome_options.add_argument('--disable-setuid-sandbox')
     chrome_options.add_argument('--ignore-ssl-errors=yes')
-    chrome_options.add_argument('--ignore-certificate-errors')
+    chrome_options.add_argument('--ignore-certificate-errors-spki-list')
 
     # verbose logging
     service = Service(ChromeDriverManager().install(), log_path='chromedriver.log', service_args=['--verbose'])
@@ -70,6 +70,16 @@ class ArticleScraper:
     article_text = ' '.join(p.text for p in paragraphs if 'ad' not in p.get('class', []))
 
     return article_text
+  
+  def getTitlesLinks(self):
+    self.driver.get(self.base_url)
+
+    elements = self.driver.find_elements(By.CSS_SELECTOR, 'tr.cursor-pointer.has-label a.tab-link-news')
+
+    article_titles = [element.text for element in elements]
+    article_links = [element.get_attribute('href') for element in elements]
+
+    return article_titles, article_links
   
   # destroys webdriver instance
   def closeScraper(self):

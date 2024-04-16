@@ -5,7 +5,7 @@ import random
 
 path = os.path.abspath(os.getcwd())
 file_path = path+'\\FinancialPhraseBank-v1.0\\Sentences_50Agree.txt'
-dataset_path = path+'\\train_data_culled'
+dataset_path = path+'\\train_data_culled_both'
 
 # reset dataset directory
 if(os.path.isdir(dataset_path)):
@@ -34,7 +34,7 @@ with open(file_path, 'r', encoding='utf-8') as fpb:
     text = tokens[0]
     [text] = tp.processText([text])
     sent = tokens[1].strip('\n')
-    if(sent != 'neutral' or random.randint(0,2) != 1 and len(text) > 0): # cull a proportion of neutral lines
+    if(not (sent == 'neutral' and random.randint(0,1) == 1) and not (sent == 'positive' and random.randint(0,2) == 1) and len(text) > 0): # cull a proportion of neutral lines
       f = open(f'{dataset_path}\\{sent}\\{counts[classify[sent]]}.txt', 'w+')
       f.write(text)
       counts[classify[sent]] += 1

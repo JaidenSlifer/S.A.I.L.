@@ -1,7 +1,7 @@
 Flask==3.0.2
 nltk==3.8.1
 selenium==4.18.1
-tensorflow==2.16.1
+tensorflow==2.15.0
 webdriver-manager==4.0.1
 scipy==1.12.0
 numpy==1.26.4

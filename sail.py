@@ -1,13 +1,30 @@
 import sys
 import os
 import shutil
+import time
 from server import ServerController
 from textprocessor import TextProcessor
-from model import SentimentModel
 from scraper import ArticleScraper
+from model import SentimentModel
 
-os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 path = os.path.abspath(os.getcwd())
+
+def compileSentiment(predictions):
+  neg = 0
+  neu = 0
+  pos = 0
+  for prediction in predictions:
+    neg += prediction[0]
+    neu += prediction[1]
+    pos += prediction[2]
+  
+  neg /= len(predictions)
+  neu /= len(predictions)
+  pos /= len(predictions)
+
+  result = (pos - neg) * neu
+
+  return [neg, neu, pos]
 
 help = """
   python sail.py [-h] <command> [<args>]
@@ -65,6 +82,7 @@ if __name__ == '__main__':
     model = SentimentModel()
     model.load_model(args[1])
     model.test_predict()
+    pass
   elif(args[0] == 'scraper'):
     if len(args) < 2:
       print("Usage: scraper <ticker> [-l | -t | -s <article_url>]")
@@ -92,5 +110,43 @@ if __name__ == '__main__':
         print("Article URL required after -s")
       
     scraper.closeScraper()
+  elif(args[0] == 'test'):
+    if(len(args) > 1): 
+
+      # create objects
+      scraper = ArticleScraper(args[1])
+      processor = TextProcessor()
+      model = SentimentModel()
+
+      # initialize objects
+      model.load_model('both-culled-model-e20')
+      scraper.initializeScraper()
+
+      # main processing chain
+      titles, links = scraper.getTitlesLinks()
+      processed_titles = processor.processText(titles)
+      predictions = model.predict(processed_titles)
+      
+      # compiled = []
+      # for link in links[:5]:
+      #   body = scraper.scrapeArticle(link)
+      #   processed_body = processor.processText(body)
+        
+      #   predict_body = model.predict(processed_body)
+      #   compiled.append(compileSentiment(predict_body))
+        
+      compiled = compileSentiment(predictions)
+
+      for i, val in enumerate(predictions):
+        print(titles[i])
+        print(processed_titles[i])
+        print(val)
+        print()
+
+      print(compiled)
+      #print(compileSentiment(compiled))
+      scraper.closeScraper()
+    else:
+      print("Syntax Error: python sail.py test <ticker>")
   else:
     print("Command not recognized")

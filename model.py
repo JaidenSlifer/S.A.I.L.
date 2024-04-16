@@ -2,13 +2,10 @@ import tensorflow as tf
 import tensorflow.keras as keras # keras is lazy loaded so this keeps the errors down
 import keras.utils as utils
 from keras.models import Sequential
-from keras.layers import TextVectorization, Embedding, LSTM, Dense, Dropout, Conv1D, MaxPooling1D, Flatten
+from keras.layers import TextVectorization, Embedding, Dense, Dropout, Conv1D, MaxPooling1D, Flatten
 from keras.losses import SparseCategoricalCrossentropy
 from keras.models import load_model
 from keras.regularizers import l2
-
-from textprocessor import TextProcessor
-import os
 
 class SentimentModel:
 
@@ -53,11 +50,11 @@ class SentimentModel:
 
     # add layers to model
     self.model.add(vectorize_layer)
-    self.model.add(Embedding(input_dim=VOCAB_SIZE, output_dim=128, input_length=100, embeddings_regularizer=l2(0.01)))
+    self.model.add(Embedding(input_dim=VOCAB_SIZE, output_dim=128, embeddings_regularizer=l2(0.01)))
     self.model.add(Conv1D(32, 6, padding="valid", activation="relu", strides=2))
     self.model.add(MaxPooling1D(pool_size=2))
     self.model.add(Flatten())
-    self.model.add(Dropout(0.8))
+    self.model.add(Dropout(0.5))
     self.model.add(Dense(10, activation='relu'))
     self.model.add(Dense(3, activation='sigmoid'))
 
@@ -74,6 +71,7 @@ class SentimentModel:
       self.model.save(save_path, overwrite=True, save_format='keras')
 
   def predict(self, input_list):
+    if(len(input_list) < 1): return None
     return self.model.predict(input_list)
   
   def load_model(self, model_path):
@@ -107,14 +105,16 @@ class SentimentModel:
       "Apple drops term 'state-sponsored' attacks from its threat notification policy",
       "Activists press Apple to oppose Vietnam's detainments of climate experts"
     ]
-    tp = TextProcessor()
-    predict_processed = tp.processText(test_predict)
+    # tp = TextProcessor()
+    # predict_processed = tp.processText(test_predict)
 
     #prediction = self.model.predict(test_predict)
-    print(self.predict(predict_processed))
+    print(self.predict(test_predict))
     # norm_predict = []
     # for vec in prediction:
     #   norm = np.sqrt(np.sum([x**2 for x in vec]))
     #   print(vec, norm)
     #   norm_predict.append([x/norm for x in vec])
     # pprint(norm_predict)
+
+    
