@@ -78,6 +78,7 @@ if __name__ == '__main__':
       links = scraper.getArticleLinks()
       for link in links:
         print(link)
+
     elif '-t' in args:
       titles = scraper.getArticleTitles()
       for title in titles:

@@ -3,15 +3,17 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from bs4 import BeautifulSoup
 import time
+
 
 class ArticleScraper:
   
   def __init__(self, ticker, driver):
     self.ticker = ticker
     self.base_url = "https://finviz.com/quote.ashx?t={ticker}&p=d".format(ticker=ticker)
-    self.driver = driver
+    self.driver = None
 
   # initializes chrome webdriver instance
   def initializeScraper(self):
@@ -24,7 +26,15 @@ class ArticleScraper:
     chrome_options.add_argument('--disable-gl-drawing-for-tests') 
     chrome_options.add_argument('--disable-accelerated-2d-canvas')
     chrome_options.add_argument('--disable-accelerated-video-decode')
-    self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+    chrome_options.add_argument('--disable-setuid-sandbox')
+    chrome_options.add_argument('--ignore-ssl-errors=yes')
+    chrome_options.add_argument('--ignore-certificate-errors-spki-list')
+    chrome_options.set_capability('goog:loggingPrefs', {'browser': 'ALL'})  # Capture all logs
+
+    # verbose logging
+    service = Service(ChromeDriverManager().install(), log_path='chromedriver.log', service_args=['--verbose'])
+
+    self.driver = webdriver.Chrome(service=service, options=chrome_options)
 
   # uses ticker instance variable and returns a list of article titles
   def getArticleTitles(self):
@@ -44,6 +54,7 @@ class ArticleScraper:
     link_elements = self.driver.find_elements(By.CSS_SELECTOR, 'tr.cursor-pointer.has-label a.tab-link-news')
         
     article_links = [element.get_attribute('href') for element in link_elements]
+
     return article_links
 
   # scrapes the article at the given link and returns the text
