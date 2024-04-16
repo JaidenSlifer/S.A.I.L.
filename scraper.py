@@ -10,7 +10,7 @@ import time
 
 class ArticleScraper:
   
-  def __init__(self, ticker, driver):
+  def __init__(self, ticker):
     self.ticker = ticker
     self.base_url = "https://finviz.com/quote.ashx?t={ticker}&p=d".format(ticker=ticker)
     self.driver = None
@@ -28,8 +28,7 @@ class ArticleScraper:
     chrome_options.add_argument('--disable-accelerated-video-decode')
     chrome_options.add_argument('--disable-setuid-sandbox')
     chrome_options.add_argument('--ignore-ssl-errors=yes')
-    chrome_options.add_argument('--ignore-certificate-errors-spki-list')
-    chrome_options.set_capability('goog:loggingPrefs', {'browser': 'ALL'})  # Capture all logs
+    chrome_options.add_argument('--ignore-certificate-errors')
 
     # verbose logging
     service = Service(ChromeDriverManager().install(), log_path='chromedriver.log', service_args=['--verbose'])

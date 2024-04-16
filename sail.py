@@ -71,7 +71,7 @@ if __name__ == '__main__':
       exit(1)
 
     ticker = args[1]
-    scraper = ArticleScraper(ticker, "https://finviz.com/quote.ashx?t={ticker}&p=d")
+    scraper = ArticleScraper(ticker)
     scraper.initializeScraper()
 
     if '-l' in args:
