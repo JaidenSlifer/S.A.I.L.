@@ -71,15 +71,16 @@ class ArticleScraper:
 
     return article_text
   
-  def getTitlesLinks(self):
+  def getAll(self):
     self.driver.get(self.base_url)
 
     elements = self.driver.find_elements(By.CSS_SELECTOR, 'tr.cursor-pointer.has-label a.tab-link-news')
+    company = self.driver.find_elements(By.CSS_SELECTOR, 'h2.quote-header_ticker-wrapper_company.text-xl a.tab-link.block.truncate')[0].text
 
     article_titles = [element.text for element in elements]
     article_links = [element.get_attribute('href') for element in elements]
 
-    return article_titles, article_links
+    return article_titles, article_links, company
   
   # destroys webdriver instance
   def closeScraper(self):

@@ -6,17 +6,12 @@ from nltk.tokenize import word_tokenize
 from nltk import pos_tag, ne_chunk
 import nltk
 
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('maxent_ne_chunker')
-nltk.download('words')
-
 class TextProcessor:
 
   def __init__(self):
     pass
 
-  def filterText(self, text: str):
+  def filterText(self, text: str, company_name):
     # Remove special characters
     text = re.sub(r'[^a-zA-Z\s]', '', text)
 
@@ -31,6 +26,7 @@ class TextProcessor:
 
     # Extract named entities
     entities = [(chunk[0][0], chunk.label()) for chunk in chunks if hasattr(chunk, 'label')]
+    print(chunks)
     print(entities)
     return entities
   
