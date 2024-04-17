@@ -2,14 +2,37 @@
 import re
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
+from nltk import pos_tag, ne_chunk
+import nltk
+
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('maxent_ne_chunker')
+nltk.download('words')
 
 class TextProcessor:
 
   def __init__(self):
     pass
 
-  def filterText(self):
-    pass
+  def filterText(self, text: str):
+    # Remove special characters
+    text = re.sub(r'[^a-zA-Z\s]', '', text)
+
+    # Tokenize the text
+    tokens = word_tokenize(text)
+
+    # Apply POS tagging
+    pos_tags = pos_tag(tokens)
+
+    # Perform named entity recognition
+    chunks = ne_chunk(pos_tags)
+
+    # Extract named entities
+    entities = [(chunk[0][0], chunk.label()) for chunk in chunks if hasattr(chunk, 'label')]
+    print(entities)
+    return entities
   
   # tokenize, lemmatize text
   # perhaps do nltk vader for lexical sentiment processing as additional info for the model
