@@ -11,7 +11,9 @@
     <div class="container mt-5">
         <h1>Results for {{ ticker }}</h1>
         <p>Sentiment Analysis: {{ sentiment }}</p>
-        <div class="tradingview-widget-container" style="height:400px; width:100%">
+        <p>Confidence: {{ confidence }}%</p>
+        <p>Most Influential Article: {{ influential_article }}</p>
+        <div class="tradingview-widget-container" style="height:80%; width:100%">
             <div id="tradingview-widget"></div>
         </div>
     </div>
