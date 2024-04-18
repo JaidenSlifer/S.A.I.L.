@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, request, jsonify, render_template, redirect, url_for
 
 class ServerController:
     
@@ -9,24 +9,37 @@ class ServerController:
         self.app.add_url_rule(rule=endpoint, endpoint=endpoint_name, view_func=handler, methods=methods)
 
     def init_routes(self):
+    #    self.add_endpoint('/', 'index', self.index, methods=['GET', 'POST'])
+    #    self.add_endpoint('/display', 'display', self.display)
+
         self.add_endpoint('/', 'index', self.index, methods=['GET', 'POST'])
+        self.add_endpoint('/analyze', 'analyze', self.analyze, methods=['POST'])  # Add this line
         self.add_endpoint('/display', 'display', self.display)
 
     def run(self, debug: bool):
         self.app.run(debug=debug)
-
+    
     def index(self):
         # Here, you can add any logic needed for initial page load or form submission handling
         return render_template('index.html')
 
+    def analyze(self):
+        try:
+            data = request.get_json()
+            ticker = data['ticker']
+            sentiment = "Positive"  # integrate actual sentiment analysis logic
+            redirect_url = url_for('display', ticker=ticker, sentiment=sentiment)
+            return jsonify({'redirect_url': redirect_url})
+        except Exception as e:
+            print(e)  # For debugging
+            return jsonify({'error': 'Failed to process request'}), 500
+
+
+    
     def display(self):
-        # If you're expecting text input from a form, ensure the form's name attribute matches
-        if request.method == 'POST':
-            text_input = request.form.get('text', '')  # Assuming input has name='text'
-            print(text_input)
-        ticker = "ABCD"  # This is just a placeholder
-        # You can pass variables to the template to be rendered dynamically
-        return render_template('display.html', ticker=ticker)
+        ticker = request.args.get('ticker', default='ABCD')
+        sentiment = request.args.get('sentiment', default='Neutral')
+        return render_template('display.html', ticker=ticker, sentiment=sentiment)
 
 # run this using the cli
 # python sail.py run -d
