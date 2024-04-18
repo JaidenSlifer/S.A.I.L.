@@ -89,14 +89,14 @@ if __name__ == '__main__':
       exit(1)
 
     ticker = args[1]
-    scraper = ArticleScraper(ticker)
-    scraper.initializeScraper()
+    scraper = ArticleScraper()
+    scraper.initializeScraper(ticker)
 
     if '-l' in args:
       links = scraper.getArticleLinks()
       for link in links:
         print(link)
-
+    
     elif '-t' in args:
       titles = scraper.getArticleTitles()
       for title in titles:
@@ -105,9 +105,12 @@ if __name__ == '__main__':
       article_index = args.index('-s') + 1
       if article_index < len(args):
         article_text = scraper.scrapeArticle(args[article_index])
-        print(article_text)
-      else:
-        print("Article URL required after -s")
+        processor = TextProcessor()
+        sentences = processor.splitIntoSentences(article_text)
+        for sentence in sentences:
+          print(sentence)
+    else:
+      print("Article URL required after -s")
       
     scraper.closeScraper()
   elif(args[0] == 'test'):
