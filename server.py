@@ -76,10 +76,10 @@ class ServerController:
         [neg, neu, pos] = compiled_sent
         if(pos > neg):
             result = 'Positive'
-            confidence = sigmoid((pos - neg) / neu)
+            confidence = (pos - neg) / neu
         elif(neg > pos):
             result = 'Negative'
-            confidence = sigmoid((neg - pos) / neu)
+            confidence = (neg - pos) / neu
         else:
             result = 'Neutral'
             confidence = neu#sigmoid(neu - pos)
@@ -105,7 +105,7 @@ class ServerController:
         #         'title': title,
         #         'link': links[i]
         #     })
-        from pprint import pprint
+
         # # process article titles and text
         # article_bodies = []
         # for article in article_info:
@@ -139,10 +139,11 @@ class ServerController:
         #         'sentiment': compiled
         #     })
 
-        processed_titles = self.processor.processText(titles)
+        filtered_titles = self.processor.filterText(titles, company)
+        processed_titles = self.processor.processText(filtered_titles)
         predictions = self.model.predict(processed_titles)
         article_sentiment = []
-        for i, title in enumerate(titles):
+        for i, title in enumerate(filtered_titles):
             article_sentiment.append({
                 'title': title,
                 'sentiment': predictions[i]

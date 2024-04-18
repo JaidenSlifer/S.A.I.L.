@@ -32,7 +32,8 @@ class TextProcessor:
         entities = [(chunk[0][0], chunk.label()) for chunk in chunks if hasattr(chunk, 'label')]
 
         # Check if the company name is in the list of named entities
-        if any(entity[0] == company_name for entity in entities):
+        if any(entity[0] in company_name.split(' ') for entity in entities):
+            print(text)
             filtered_texts.append(text)
 
     return filtered_texts
