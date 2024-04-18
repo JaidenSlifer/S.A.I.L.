@@ -16,6 +16,10 @@ class ServerController:
         self.scraper = ArticleScraper()
         self.processor = TextProcessor()
         self.model = SentimentModel()
+        self.invalid = False
+        f = open('nasdaq_tickers.txt', 'r')
+        self.valid_tickers = [line.rstrip() for line in f.readlines()]
+        f.close()
 
     def add_endpoint(self, endpoint: str, endpoint_name: str, handler, methods=None):
         self.app.add_url_rule(rule=endpoint, endpoint=endpoint_name, view_func=handler, methods=methods)
@@ -33,16 +37,19 @@ class ServerController:
     
     def index(self):
         # Here, you can add any logic needed for initial page load or form submission handling
-        return render_template('index.html')
+        return render_template('index.html', invalid=self.invalid)
 
     def analyze(self):
         try:
+            self.invalid = False
             data = request.get_json()
             ticker = data['ticker']
-            sentiment, confidence, influential_article = self.analyzeSentiment(ticker)
-            if(sentiment is None):
-                time.sleep(1)
-            redirect_url = url_for('display', ticker=ticker, sentiment=sentiment, confidence=confidence, influential_article=influential_article)
+            if(ticker not in self.valid_tickers):
+                self.invalid = True
+                redirect_url = url_for('index')
+            else:
+                sentiment, confidence, influential_article = self.analyzeSentiment(ticker)
+                redirect_url = url_for('display', ticker=ticker, sentiment=sentiment, confidence=confidence, influential_article=influential_article)
             return jsonify({'redirect_url': redirect_url})
         except Exception as e:
             print(e)  # For debugging

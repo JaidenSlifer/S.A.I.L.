@@ -11,6 +11,9 @@
     <div class="container mt-5">
         <div class="jumbotron">
             <h1 class="display-4">Enter Stock Ticker</h1>
+            {% if invalid %}
+                <h4 class="text-danger">Ticker invalid or not on NASDAQ, try again.</h4>
+            {% endif %}
             <form id="tickerForm" class="form-inline mt-3">
                 <input type="text" id="tickerInput" name="ticker" class="form-control mb-2 mr-sm-2" placeholder="AAPL, GOOGL, MSFT..." required>
                 <button type="submit" class="btn btn-primary mb-2">Analyze</button>
