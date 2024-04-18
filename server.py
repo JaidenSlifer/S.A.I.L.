@@ -39,7 +39,10 @@ class ServerController:
     def display(self):
         ticker = request.args.get('ticker', default='ABCD')
         sentiment = request.args.get('sentiment', default='Neutral')
-        return render_template('display.html', ticker=ticker, sentiment=sentiment)
+        confidence = request.args.get('confidence', default=0)  # Assuming it's passed as a query parameter
+        influential_article = request.args.get('article', default='')  # Assuming it's passed as a query parameter
+
+        return render_template('display.html', ticker=ticker, sentiment=sentiment, confidence = confidence, influential_article=influential_article)
 
 # run this using the cli
 # python sail.py run -d
