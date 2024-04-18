@@ -3,6 +3,7 @@ import re
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
+from nltk.tokenize import sent_tokenize
 from nltk import pos_tag, ne_chunk
 import nltk
 
@@ -45,3 +46,7 @@ class TextProcessor:
       lemmatized_tokens = [lemmatizer.lemmatize(token) for token in filtered_tokens]
       processed.append(' '.join(lemmatized_tokens))
     return processed
+  
+  def splitIntoSentences(self, text: str) -> list[str]:
+    sentences = sent_tokenize(text)
+    return sentences
