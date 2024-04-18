@@ -12,24 +12,30 @@ class TextProcessor:
   def __init__(self):
     pass
 
-  def filterText(self, text: str, company_name):
-    # Remove special characters
-    text = re.sub(r'[^a-zA-Z\s]', '', text)
+  def filterText(self, texts: list[str], company_name: str):
+    filtered_texts = []
 
-    # Tokenize the text
-    tokens = word_tokenize(text)
+    for text in texts:
+        # Remove special characters
+        text = re.sub(r'[^a-zA-Z\s]', '', text)
 
-    # Apply POS tagging
-    pos_tags = pos_tag(tokens)
+        # Tokenize the text
+        tokens = word_tokenize(text)
 
-    # Perform named entity recognition
-    chunks = ne_chunk(pos_tags)
+        # Apply POS tagging
+        pos_tags = pos_tag(tokens)
 
-    # Extract named entities
-    entities = [(chunk[0][0], chunk.label()) for chunk in chunks if hasattr(chunk, 'label')]
-    print(chunks)
-    print(entities)
-    return entities
+        # Perform named entity recognition
+        chunks = ne_chunk(pos_tags)
+
+        # Extract named entities
+        entities = [(chunk[0][0], chunk.label()) for chunk in chunks if hasattr(chunk, 'label')]
+
+        # Check if the company name is in the list of named entities
+        if any(entity[0] == company_name for entity in entities):
+            filtered_texts.append(text)
+
+    return filtered_texts
   
   # tokenize, lemmatize text
   # perhaps do nltk vader for lexical sentiment processing as additional info for the model
