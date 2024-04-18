@@ -1,15 +1,43 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stock Analysis: {{ ticker }}</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Analysis: {{ ticker }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <h1>Results for {{ ticker }}</h1>
-  <p>Sentiment Analysis: {{ stock_info.Sentiment }}</p> <!-- Sentiment analysis of the company's overall sentiment whenever that is added-->
-  <p>Recommendation: {{ stock_info.Recommendation }}</p>
-  <img src="{{ stock_info.Chart }}" alt="Stock Chart">
-  <!-- More elements can be added here to display additional information -->
+    <div class="container mt-5">
+        <h1>Results for {{ ticker }}</h1>
+        <p>Sentiment Analysis: {{ sentiment }}</p>
+        <div class="tradingview-widget-container" style="height:400px; width:100%">
+            <div id="tradingview-widget"></div>
+        </div>
+    </div>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const ticker = urlParams.get('ticker');
+            const script = document.createElement('script');
+            script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+            script.async = true;
+            script.type = 'text/javascript';
+            script.innerHTML = JSON.stringify({
+                "autosize": true,
+                "symbol": "NASDAQ:" + ticker,
+                "interval": "D",
+                "timezone": "Etc/UTC",
+                "theme": "light",
+                "style": "1",
+                "locale": "en",
+                "toolbar_bg": "#f1f3f6",
+                "enable_publishing": false,
+                "allow_symbol_change": true,
+                "container_id": "tradingview-widget"
+            });
+            document.getElementById('tradingview-widget').appendChild(script);
+        });
+    </script>
 </body>
 </html>
