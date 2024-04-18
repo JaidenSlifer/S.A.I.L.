@@ -11,12 +11,12 @@ import time
 class ArticleScraper:
   
   def __init__(self):
-    self.base_url = "https://finviz.com/quote.ashx?t={ticker}&p=d"
+    self.base_url = ''
     self.driver = None
 
   # initializes chrome webdriver instance
   def initializeScraper(self, ticker):
-    self.base_url.format(ticker=ticker)
+    self.base_url = "https://finviz.com/quote.ashx?t={ticker}&p=d".format(ticker=ticker)
     chrome_options = Options()
     #chrome_options.add_argument('--headless=new')
     chrome_options.add_argument('--no-sandbox')

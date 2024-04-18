@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container mt-5 bg-light">
         <h1>Results for {{ ticker }}</h1>
         <p>Sentiment Analysis: {{ sentiment }}</p>
         <p>Confidence: {{ confidence }}%</p>
@@ -26,7 +26,8 @@
             script.async = true;
             script.type = 'text/javascript';
             script.innerHTML = JSON.stringify({
-                "autosize": true,
+                "width": "980",
+                "height": "610",
                 "symbol": "NASDAQ:" + ticker,
                 "interval": "D",
                 "timezone": "Etc/UTC",
