@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S.A.I.L. Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
-    <div class="background-image"></div>
-    <div id="dashboard">
-        <!-- The 'onsubmit' attribute is added to call 'handleAnalyzeClick' function when the form is submitted -->
-        <form id="tickerForm">
-          <input type="text" id="tickerInput" name="ticker" placeholder="Enter Stock Ticker" required>
-          <button type="submit" id="analyzeBtn">Analyze</button>
-      </form>
-      <!-- Div to display results -->
-      <div id="results"></div>
-  </div>
-  <!-- Link to the external script.js file -->
-  <script src="script.js"></script>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="jumbotron">
+            <h1 class="display-4">Enter Stock Ticker</h1>
+            <form id="tickerForm" class="form-inline mt-3">
+                <input type="text" id="tickerInput" name="ticker" class="form-control mb-2 mr-sm-2" placeholder="AAPL, GOOGL, MSFT..." required>
+                <button type="submit" class="btn btn-primary mb-2">Analyze</button>
+            </form>
+        </div>
+        <div id="results" class="mt-3"></div>
+    </div>
+    <script src="/static/script.js"></script>
 </body>
+</html>
